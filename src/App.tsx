@@ -2,10 +2,10 @@ import "bootstrap/dist/css/bootstrap.min.css"
 import { Container } from "react-bootstrap"
 import { Navigate, Route, Routes } from "react-router-dom"
 import NewNote from "./Pages/NewNote/NewNote"
+import NoteList from "./Pages/NoteList/NoteList"
 import useLocalStorage from "./componants/useLocalStorage/useLocalStorage"
 import { useMemo } from "react"
 import {v4 as uuidV4} from "uuid";
-import NoteList from "./componants/NoteList/NoteList"
 
 export type Note = {
     id: string
