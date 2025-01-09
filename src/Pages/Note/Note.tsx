@@ -1,7 +1,7 @@
 import { Badge, Button, Col, Row, Stack } from "react-bootstrap"
 import { Link, useNavigate } from "react-router-dom"
 import ReactMarkdown from "react-markdown"
-import { useNote } from "../../Pages/NoteLayout/NoteLayout"
+import { useNote } from "../NoteLayout/NoteLayout"
 
 type NoteProps = {
   onDelete: (id: string) => void

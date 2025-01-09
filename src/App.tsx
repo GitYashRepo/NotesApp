@@ -7,7 +7,7 @@ import useLocalStorage from "./componants/useLocalStorage/useLocalStorage"
 import { useMemo } from "react"
 import {v4 as uuidV4} from "uuid";
 import { NoteLayout } from "./Pages/NoteLayout/NoteLayout"
-import { Note } from "./componants/Note/Note"
+import { Note } from "./Pages/Note/Note"
 import { EditNote } from "./Pages/EditNote/EditNote"
 
 export type Note = {
