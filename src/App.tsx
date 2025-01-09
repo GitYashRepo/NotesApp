@@ -1,11 +1,14 @@
 import "bootstrap/dist/css/bootstrap.min.css"
 import { Container } from "react-bootstrap"
 import { Navigate, Route, Routes } from "react-router-dom"
-import NewNote from "./Pages/NewNote/NewNote"
-import NoteList from "./Pages/NoteList/NoteList"
+import { NewNote } from "./Pages/NewNote/NewNote"
+import { NoteList } from "./Pages/NoteList/NoteList"
 import useLocalStorage from "./componants/useLocalStorage/useLocalStorage"
 import { useMemo } from "react"
 import {v4 as uuidV4} from "uuid";
+import { NoteLayout } from "./Pages/NoteLayout/NoteLayout"
+import { Note } from "./componants/Note/Note"
+import { EditNote } from "./Pages/EditNote/EditNote"
 
 export type Note = {
     id: string
@@ -51,18 +54,54 @@ function App() {
         })
     }
 
+    function onUpdateNote(id: string, {tags, ...data}: NoteData){
+        setNotes(prevNotes => {
+            return prevNotes.map(note=>{
+                if(note.id === id){
+                    return { ...note, ...data, tagIds: tags.map(tag => tag.id) }
+                } else {
+                    return note
+                }
+            })
+        })
+    }
+
+    function onDeleteNote(id: string){
+        setNotes(prevNotes => {
+            return prevNotes.filter(note => note.id !== id)
+        })
+    }
+
     function addTag(tag: Tag){
         setTags(prev=> [...prev, tag])
+    }
+
+    function updateTag(id: string, label: string){
+        setTags(prevTags => {
+            return prevTags.map(tag => {
+                if (tag.id === id) {
+                    return { ...tag, label }
+                } else {
+                    return tag
+                }
+            })
+        })
+    }
+
+    function deleteTag(id: string){
+        setTags(prevTags => {
+            return prevTags.filter(tag => tag.id !== id)
+        })
     }
 
   return(
     <Container className="my-4">
         <Routes>
-          <Route path="/" element={<NoteList availableTags={tags}/>}/>
+          <Route path="/" element={<NoteList notes={notesWithTags} availableTags={tags} onUpdateTag={updateTag} onDeleteTag={deleteTag}/>}/>
           <Route path="/new" element={<NewNote onSubmit={onCreateNote} onAddTag={addTag} availableTags={tags}/>}/>
-          <Route path="/:id">
-              <Route index element={<h1 className="text-4xl font-bold text-red-600">Show</h1>}/>
-              <Route path="/edit" element={<h1 className="text-4xl font-bold text-red-600">Edit</h1>}/>
+          <Route path="/:id" element={<NoteLayout notes={notesWithTags} />}>
+              <Route index element={<Note onDelete={onDeleteNote}/>}/>
+              <Route path="edit" element={<EditNote onSubmit={onUpdateNote} onAddTag={addTag} availableTags={tags}/>}/>
           </Route>
           <Route path="*" element={<Navigate to="/"/>}/>
         </Routes>
